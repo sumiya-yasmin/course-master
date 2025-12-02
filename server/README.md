@@ -1,1 +1,0 @@
-This is a fullstack Educational Technology Platform
