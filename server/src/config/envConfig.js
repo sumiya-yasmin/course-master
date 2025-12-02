@@ -12,7 +12,8 @@ const config = {
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
-  }
+  },
+  JWT_SECRET: process.env.JWT_SECRET
 };
 
 export default config;
