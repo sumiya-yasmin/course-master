@@ -1,3 +1,19 @@
+export interface Lesson {
+  _id: string;
+  title: string;
+  videoUrl: string;
+  duration: number;
+  isFree: boolean;
+}
+
+export interface Batch {
+  _id: string;
+  title: string;
+  startDate: string;
+  endDate?: string;
+  enrollmentClosed?: boolean;
+}
+
 export interface Course {
   _id: string;
   title: string;
@@ -8,6 +24,8 @@ export interface Course {
   thumbnail: string;
   level: string;
   tags: string[];
+  syllabus: Lesson[]; 
+  batches: Batch[];
 }
 
 export interface CourseResponse {
@@ -25,4 +43,15 @@ export interface CourseParams {
   minPrice?: number;
   maxPrice?: number;
   sort?: string;
+}
+
+export interface CreateCourseInput {
+  title: string;
+  description: string;
+  price: number;
+  instructor: string;
+  category: string;
+  thumbnail: string;
+  level: string;
+  tags: string[];
 }
