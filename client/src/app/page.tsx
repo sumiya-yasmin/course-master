@@ -1,21 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCourses, useEnroll } from "@/src/hooks/useCourses";
-import { useStudentDashboard } from "@/src/hooks/useStudentDashboard"; // Import this to check status
+import { useStudentDashboard } from "@/src/hooks/useStudentDashboard";
 import Navbar from "@/src/components/Navbar";
 
-// UI Components
 import { Button } from "@/src/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/src/components/ui/card";
 import { Badge } from "@/src/components/ui/badge";
+import CourseCard from "../components/CourseCard";
 
 export default function HomePage() {
   const router = useRouter();
@@ -32,6 +25,16 @@ export default function HomePage() {
       (enrollment) => enrollment.course._id === courseId
     );
   };
+
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    const userStr = localStorage.getItem("user");
+    if (userStr) {
+      const user = JSON.parse(userStr);
+      if (user.role === "admin") setIsAdmin(true);
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -59,78 +62,45 @@ export default function HomePage() {
                 const alreadyEnrolled = isEnrolled(course._id);
 
                 return (
-                  <Card
+                  <CourseCard
                     key={course._id}
-                    className="hover:shadow-lg transition-all duration-300 border-gray-200"
-                  >
-                    <div className="h-48 bg-gray-100 w-full relative group">
-                      <img
-                        src={course.thumbnail}
-                        alt={course.title}
-                        className="w-full h-full object-cover rounded-t-lg group-hover:scale-105 transition-transform duration-500"
-                      />
-                      <Badge className="absolute top-3 right-3 bg-white/90 text-black backdrop-blur-sm shadow-sm hover:bg-white">
-                        {course.level}
-                      </Badge>
-                      {alreadyEnrolled && (
-                        <Badge className="absolute top-3 left-3 bg-green-500 text-white shadow-sm hover:bg-green-600">
+                    course={course}
+                    badges={
+                      alreadyEnrolled && (
+                        <Badge className="bg-green-500 text-white hover:bg-green-600">
                           Enrolled
                         </Badge>
-                      )}
-                    </div>
-
-                    <CardHeader>
-                      <div className="flex justify-between items-start gap-2">
-                        <div>
-                          <p className="text-xs text-blue-600 font-bold uppercase tracking-wider mb-1">
-                            {course.category}
-                          </p>
-                          <CardTitle className="text-lg leading-tight line-clamp-2 hover:text-blue-600 transition-colors">
-                            {course.title}
-                          </CardTitle>
-                        </div>
-                        <span className="text-lg font-bold text-green-700">
-                          ${course.price}
-                        </span>
-                      </div>
-                      <p className="text-sm text-gray-500 font-medium">
-                        By {course.instructor}
-                      </p>
-                    </CardHeader>
-
-                    <CardContent>
-                      <p className="text-sm text-gray-600 line-clamp-2">
-                        {course.description}
-                      </p>
-                    </CardContent>
-
-                    <CardFooter className="flex gap-3 pt-2">
-                      <Button
-                        variant="outline"
-                        className="flex-1 border-blue-200 text-blue-700 hover:bg-blue-50"
-                        onClick={() => router.push(`/course/${course._id}`)}
-                      >
-                        Details
-                      </Button>
-
-                      {alreadyEnrolled ? (
+                      )
+                    }
+                    footer={
+                      <>
                         <Button
-                          className="flex-1 bg-green-600 hover:bg-green-700"
-                          onClick={() => router.push("/student/dashboard")}
+                          variant="outline"
+                          className="flex-1 border-blue-200 text-blue-700 hover:bg-blue-50"
+                          onClick={() => router.push(`/course/${course._id}`)}
                         >
-                          Go to Dashboard
+                          Details
                         </Button>
-                      ) : (
-                        <Button
-                          className="flex-1 bg-blue-600 hover:bg-blue-700"
-                          disabled={isEnrolling}
-                          onClick={() => enroll(course._id)}
-                        >
-                          {isEnrolling ? "Enrolling..." : "Enroll Now"}
-                        </Button>
-                      )}
-                    </CardFooter>
-                  </Card>
+                        {!isAdmin &&
+                          (alreadyEnrolled ? (
+                            <Button
+                              className="flex-1 bg-green-600 hover:bg-green-700"
+                              onClick={() => router.push("/student/dashboard")}
+                            >
+                              Go to Dashboard
+                            </Button>
+                          ) : (
+                            <Button
+                              className="flex-1 bg-blue-600 hover:bg-blue-700"
+                              disabled={isEnrolling}
+                              onClick={() => enroll(course._id)}
+                            >
+                              {isEnrolling ? "Enrolling..." : "Enroll Now"}
+                            </Button>
+                          ))}
+                      </>
+                    }
+                  />
                 );
               })}
             </div>
