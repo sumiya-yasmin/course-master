@@ -8,6 +8,7 @@ import { Button } from '@/src/components/ui/button';
 import { useStudentDashboard } from '@/src/hooks/useStudentDashboard';
 import { Progress } from '@/src/components/ui/progress';
 import Navbar from '@/src/components/Navbar';
+import CourseCard from '@/src/components/CourseCard';
 
 export default function StudentDashboard() {
   const { enrollments, isLoading } = useStudentDashboard();
@@ -48,39 +49,19 @@ export default function StudentDashboard() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredEnrollments.map((enrollment) => (
-              <Card key={enrollment._id} className="flex flex-col hover:shadow-md transition-shadow">
-                <div className="h-48 w-full bg-gray-200 relative overflow-hidden rounded-t-lg">
-                  <img 
-                    src={enrollment.course.thumbnail || 'https://via.placeholder.com/400x200'} 
-                    alt={enrollment.course.title}
-                    className="object-cover w-full h-full"
-                  />
-                </div>
-
-                <CardHeader>
-                  <CardTitle className="line-clamp-1">{enrollment.course.title}</CardTitle>
-                  <p className="text-sm text-gray-500">Instr: {enrollment.course.instructor}</p>
-                </CardHeader>
-
-                <CardContent className="flex-grow">
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span>Progress</span>
-                      <span className="font-bold">{enrollment.progress}%</span>
-                    </div>
-                    <Progress value={enrollment.progress} className="h-2" />
-                  </div>
-                </CardContent>
-
-                <CardFooter>
+           <CourseCard
+                key={enrollment._id}
+                course={enrollment.course} 
+                progress={enrollment.progress}
+                footer={
                   <Button 
                     className="w-full" 
                     onClick={() => router.push(`/course/${enrollment.course._id}`)}
                   >
                     {enrollment.progress > 0 ? 'Continue Learning' : 'Start Course'}
                   </Button>
-                </CardFooter>
-              </Card>
+                }
+              />
             ))}
           </div>
         )}
