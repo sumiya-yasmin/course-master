@@ -15,3 +15,15 @@ export interface Enrollment {
   completedLessons: string[];
   createdAt: string;
 }
+
+export interface AdminEnrollment {
+  _id: string;
+  student: { name: string; email: string };
+  course: { 
+    title: string; 
+    price: number;
+    batches?: { title: string }[];
+  }; 
+  progress: number;
+  createdAt: string;
+}
