@@ -29,3 +29,12 @@ export const updateProgress = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
+
+export const getAllEnrollments = async (req, res) => {
+  try {
+    const enrollments = await enrollmentServices.getAllEnrollmentsService();
+    res.status(200).json(enrollments);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
