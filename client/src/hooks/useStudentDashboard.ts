@@ -1,9 +1,11 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState, useEffect } from 'react';
-import { getMyCoursesApi } from '../api/student';
+import { getMyCoursesApi, markLessonCompleteApi } from '../api/student';
+import toast from 'react-hot-toast';
 
 export const useStudentDashboard = () => {
   const [isEnabled, setIsEnabled] = useState(false);
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -17,9 +19,22 @@ export const useStudentDashboard = () => {
     retry: false,
   });
 
+  const { mutate: markComplete, isPending: isMarking } = useMutation({
+    mutationFn: markLessonCompleteApi,
+    onSuccess: () => {
+      toast.success('Progress updated!');
+      queryClient.invalidateQueries({ queryKey: ['my-courses'] });
+    },
+    onError: (_err: any) => {
+      toast.error('Failed to update progress');
+    }
+  });
+
   return { 
     enrollments: data || [], 
     isLoading: isEnabled && isLoading, 
-    error 
+    error,
+    markComplete, 
+    isMarking 
   };
 };
