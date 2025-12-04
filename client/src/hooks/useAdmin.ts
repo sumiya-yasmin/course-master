@@ -1,8 +1,8 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
-import { createCourseApi, deleteCourseApi, updateCourseApi } from '../api/admin';
+import { createCourseApi, deleteCourseApi, getAdminEnrollmentsApi, updateCourseApi } from '../api/admin';
 
 export const useDeleteCourse = () => {
   const queryClient = useQueryClient();
@@ -50,5 +50,13 @@ export const useUpdateCourse = () => {
     onError: (_error: any) => {
       toast.error('Failed to update course');
     }
+  });
+};
+
+export const useViewEnrollments= ()=>
+{
+return useQuery({
+    queryKey: ['admin-enrollments'],
+    queryFn: getAdminEnrollmentsApi,
   });
 };
