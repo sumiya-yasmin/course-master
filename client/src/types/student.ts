@@ -12,5 +12,6 @@ export interface Enrollment {
   course: CourseSummary; 
   progress: number;     
   isCompleted: boolean;
+  completedLessons: string[];
   createdAt: string;
 }
