@@ -3,10 +3,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/src/components/ui/card';
 import { Button } from '@/src/components/ui/button';
 import { useStudentDashboard } from '@/src/hooks/useStudentDashboard';
-import { Progress } from '@/src/components/ui/progress';
 import Navbar from '@/src/components/Navbar';
 import CourseCard from '@/src/components/CourseCard';
 

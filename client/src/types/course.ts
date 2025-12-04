@@ -13,6 +13,11 @@ export interface Batch {
   endDate?: string;
   enrollmentClosed?: boolean;
 }
+export interface QuizQuestion {
+  question: string;
+  options: string[]; 
+  correctAnswer: string;
+}
 
 export interface Course {
   _id: string;
@@ -26,6 +31,7 @@ export interface Course {
   tags: string[];
   syllabus: Lesson[]; 
   batches: Batch[];
+  quiz?: QuizQuestion[];
 }
 
 export interface CourseResponse {

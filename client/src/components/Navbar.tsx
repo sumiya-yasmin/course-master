@@ -5,6 +5,7 @@ import { Search, LayoutDashboard, LogOut } from 'lucide-react';
 import { Button } from '@/src/components/ui/button';
 import { Input } from '@/src/components/ui/input';
 import { useEffect, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface NavbarProps {
   searchTerm: string;
@@ -14,6 +15,7 @@ interface NavbarProps {
 export default function Navbar({ searchTerm, onSearchChange }: NavbarProps) {
   const router = useRouter();
   const pathname = usePathname();
+  const queryClient = useQueryClient(); 
   
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [dashboardUrl, setDashboardUrl] = useState('/student/dashboard');
@@ -28,14 +30,18 @@ export default function Navbar({ searchTerm, onSearchChange }: NavbarProps) {
         const user = JSON.parse(userStr);
         setDashboardUrl(user.role === 'admin' ? '/admin/dashboard' : '/student/dashboard');
       }
+    }else {
+        setIsLoggedIn(false); 
     }
-  }, []);
+  }, [pathname]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    queryClient.clear();
     setIsLoggedIn(false); 
     router.push('/');
+    router.refresh(); 
   };
 
   return (

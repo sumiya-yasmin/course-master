@@ -3,8 +3,6 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
-import { Toaster } from 'react-hot-toast';
-
 import { useRegister } from '@/src/hooks/useAuth';
 import { RegisterInput, registerSchema } from '@/src/lib/schema/authSchema';
 
@@ -30,8 +28,6 @@ export default function RegisterPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
-      <Toaster position="top-center" />
-      
       <Card className="w-full max-w-md shadow-lg">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center">Create Account</CardTitle>

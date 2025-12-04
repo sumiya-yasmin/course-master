@@ -1,7 +1,13 @@
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/src/components/ui/card';
-import { Badge } from '@/src/components/ui/badge';
-import { Progress } from '@/src/components/ui/progress';
-import { Calendar } from 'lucide-react';
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/src/components/ui/card";
+import { Badge } from "@/src/components/ui/badge";
+import { Progress } from "@/src/components/ui/progress";
+import { Calendar } from "lucide-react";
 
 interface CourseCardProps {
   course: {
@@ -13,9 +19,9 @@ interface CourseCardProps {
     level?: string;
     price?: number;
     description?: string;
-    batches?: { 
-      title: string; 
-      startDate: string; 
+    batches?: {
+      title: string;
+      startDate: string;
     }[];
   };
   progress?: number;
@@ -25,44 +31,51 @@ interface CourseCardProps {
   className?: string;
 }
 
-export default function CourseCard({ 
-  course, 
-  progress, 
-  badges, 
-  footer, 
+export default function CourseCard({
+  course,
+  progress,
+  badges,
+  footer,
   onClick,
-  className 
+  className,
 }: CourseCardProps) {
-  
-  const nextBatch = course.batches && course.batches.length > 0 ? course.batches[0] : null;
+  const nextBatch =
+    course.batches && course.batches.length > 0 ? course.batches[0] : null;
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    return new Date(dateString).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+    });
   };
 
   return (
-    <Card 
+    <Card
       className={`flex flex-col hover:shadow-lg transition-all duration-300 border-gray-200 overflow-hidden group ${className}`}
       onClick={onClick}
     >
       <div className="h-48 w-full bg-gray-200 relative overflow-hidden">
-        <img 
-           src={course.thumbnail || 'https://via.placeholder.com/400x200'} 
-           alt={course.title} 
-           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        <img
+          src={course.thumbnail || "https://via.placeholder.com/400x200"}
+          alt={course.title}
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          onError={(e) => {
+            (e.target as HTMLImageElement).src =
+              "https://via.placeholder.com/400x200?text=No+Image";
+          }}
         />
-        
+
         <div className="absolute top-2 right-2 flex flex-col gap-1 items-end">
-           {course.level && (
-             <Badge className="bg-white/90 text-black backdrop-blur-sm shadow-sm hover:bg-white">
-               {course.level}
-             </Badge>
-           )}
-           {course.price !== undefined && (
-             <Badge className="bg-blue-600 text-white shadow-sm border-0">
-               ${course.price}
-             </Badge>
-           )}
+          {course.level && (
+            <Badge className="bg-white/90 text-black backdrop-blur-sm shadow-sm hover:bg-white">
+              {course.level}
+            </Badge>
+          )}
+          {course.price !== undefined && (
+            <Badge className="bg-blue-600 text-white shadow-sm border-0">
+              ${course.price}
+            </Badge>
+          )}
         </div>
 
         {badges && (
@@ -85,22 +98,23 @@ export default function CourseCard({
             </CardTitle>
           </div>
         </div>
-        
+
         <div className="flex justify-between items-center mt-1">
-          <p className="text-sm text-gray-500 font-medium">By {course.instructor}</p>
-          
-    
+          <p className="text-sm text-gray-500 font-medium">
+            By {course.instructor}
+          </p>
+
           {nextBatch && (
-             <div className="flex items-center text-xs text-orange-600 font-medium bg-orange-50 px-2 py-1 rounded-md">
-                <Calendar className="w-3 h-3 mr-1" />
-                <span className="font-bold mr-2">{nextBatch.title}:</span>
-                {formatDate(nextBatch.startDate)}
-             </div>
+            <div className="flex items-center text-xs text-orange-600 font-medium bg-orange-50 px-2 py-1 rounded-md">
+              <Calendar className="w-3 h-3 mr-1" />
+              <span className="font-bold mr-2">{nextBatch.title}:</span>
+              {formatDate(nextBatch.startDate)}
+            </div>
           )}
         </div>
       </CardHeader>
 
-      <CardContent className="flex-grow">
+      <CardContent className="grow">
         {progress !== undefined ? (
           <div className="space-y-2 mt-2">
             <div className="flex justify-between text-sm">
@@ -116,9 +130,7 @@ export default function CourseCard({
         )}
       </CardContent>
 
-      <CardFooter className="pt-2 gap-2">
-        {footer}
-      </CardFooter>
+      <CardFooter className="pt-2 gap-2">{footer}</CardFooter>
     </Card>
   );
 }

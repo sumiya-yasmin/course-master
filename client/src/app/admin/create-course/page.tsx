@@ -78,7 +78,21 @@ export default function CreateCoursePage() {
   const { fields: quizFields, append: addQuiz, remove: removeQuiz } = useFieldArray({ control, name: "quiz" });
 
   const onSubmit = (data: any) => {
-    const transformedQuiz = data.quiz?.map((q: any) => ({
+    const validQuiz = data.quiz?.filter((q: any) => 
+      q.question?.trim() !== '' && 
+      q.correctAnswer?.trim() !== '' && 
+      q.optionsString?.trim() !== ''
+    );
+
+    const validSyllabus = data.syllabus?.filter((l: any) => 
+      l.title?.trim() !== '' && l.videoUrl?.trim() !== ''
+    );
+
+    const validBatches = data.batches?.filter((b: any) => 
+      b.title?.trim() !== '' && b.startDate !== ''
+    );
+
+    const transformedQuiz = validQuiz?.map((q: any) => ({
       question: q.question,
       correctAnswer: q.correctAnswer.trim(),
       options: q.optionsString.split(',').map((opt: string) => opt.trim())
@@ -87,6 +101,8 @@ export default function CreateCoursePage() {
         ...data, 
         price: Number(data.price),
         quiz: transformedQuiz,
+        syllabus: validSyllabus,
+        batches: validBatches,
         assignment: {
             ...data.assignment,
             totalPoints: Number(data.assignment.totalPoints)

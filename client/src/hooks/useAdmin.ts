@@ -25,10 +25,10 @@ export const useCreateCourse = () => {
 
   return useMutation({
     mutationFn: createCourseApi,
-    onSuccess: () => {
+    onSuccess: (newCourse) => {
       toast.success('Course created successfully!');
       queryClient.invalidateQueries({ queryKey: ['courses'] });
-      router.push('/admin/dashboard'); 
+      router.push(`/course/${newCourse._id}`);  
     },
     onError: (error: any) => {
       toast.error(error.response?.data?.message || 'Failed to create course');
@@ -42,10 +42,10 @@ export const useUpdateCourse = () => {
 
   return useMutation({
     mutationFn: updateCourseApi,
-    onSuccess: () => {
+    onSuccess: (newCourse) => {
       toast.success('Course updated!');
       queryClient.invalidateQueries({ queryKey: ['courses'] });
-      router.push('/admin/dashboard');
+      router.push(`/course/${newCourse._id}`);
     },
     onError: (_error: any) => {
       toast.error('Failed to update course');
