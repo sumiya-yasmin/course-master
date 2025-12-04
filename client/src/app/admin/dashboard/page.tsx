@@ -7,7 +7,7 @@ import Navbar from '@/src/components/Navbar';
 
 import { Button } from '@/src/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/src/components/ui/card';
-import { Trash2, PlusCircle, Users, Edit } from 'lucide-react';
+import { Trash2, PlusCircle, Users, Edit, FileText } from 'lucide-react';
 import { useDeleteCourse } from '@/src/hooks/useAdmin';
 import CourseCard from '@/src/components/CourseCard';
 
@@ -31,20 +31,36 @@ export default function AdminDashboard() {
         <div className="flex flex-col md:flex-row items-center justify-between mb-8 gap-4">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-            <p className="text-gray-500">Overview of your platform.</p>
+            <p className="text-gray-500">Manage courses, students, and reviews.</p>
           </div>
-          <div className="flex gap-2">
-           <Button onClick={() => router.push('/admin/enrollments')} variant="outline" className="bg-white hover:bg-gray-50">
-                <Users className="mr-2 h-4 w-4" /> View Enrollments
+          <div className="flex flex-wrap gap-2">
+            <Button 
+              onClick={() => router.push('/admin/enrollments')} 
+              variant="outline" 
+              className="bg-white hover:bg-gray-50 border-gray-300"
+            >
+                <Users className="mr-2 h-4 w-4" /> Enrollments
             </Button>
-          <Button onClick={() => router.push('/admin/create-course')} className="bg-blue-600 hover:bg-blue-700">
-            <PlusCircle className="mr-2 h-4 w-4" /> Create New Course
-          </Button>
+
+            <Button 
+              onClick={() => router.push('/admin/submissions')} 
+              variant="outline" 
+              className="bg-white hover:bg-gray-50 border-gray-300"
+            >
+                <FileText className="mr-2 h-4 w-4" /> Submissions
+            </Button>
+
+            <Button 
+              onClick={() => router.push('/admin/create-course')} 
+              className="bg-blue-600 hover:bg-blue-700 text-white"
+            >
+                <PlusCircle className="mr-2 h-4 w-4" /> Create Course
+            </Button>
           </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-           <Card className="bg-white shadow-sm">
+           <Card className="bg-white shadow-sm border-gray-200">
              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                <CardTitle className="text-sm font-medium text-gray-500">Total Courses</CardTitle>
                <Users className="h-4 w-4 text-blue-500" />
