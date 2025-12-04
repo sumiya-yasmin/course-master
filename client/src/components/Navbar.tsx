@@ -19,6 +19,7 @@ export default function Navbar({ searchTerm, onSearchChange }: NavbarProps) {
   
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [dashboardUrl, setDashboardUrl] = useState('/student/dashboard');
+  const [isAuthChecked, setIsAuthChecked] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -33,6 +34,7 @@ export default function Navbar({ searchTerm, onSearchChange }: NavbarProps) {
     }else {
         setIsLoggedIn(false); 
     }
+     setIsAuthChecked(true);
   }, [pathname]);
 
   const handleLogout = () => {
@@ -43,6 +45,7 @@ export default function Navbar({ searchTerm, onSearchChange }: NavbarProps) {
     router.push('/');
     router.refresh(); 
   };
+  const isDashboardActive = pathname.includes('/dashboard');
 
   return (
     <div className="bg-white border-b sticky top-0 z-50 shadow-sm">
@@ -66,17 +69,21 @@ export default function Navbar({ searchTerm, onSearchChange }: NavbarProps) {
         </div>
 
         <div className="flex gap-2 items-center">
-          {isLoggedIn ? (
+          {isAuthChecked && (
+          isLoggedIn ? (
             <>
-              {pathname === '/' && (
+              
                 <Button 
                   onClick={() => router.push(dashboardUrl)}
-                  className="bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-200"
+                  className={`border ${isDashboardActive 
+                    ? "bg-blue-100 text-blue-700 border-blue-200 hover:bg-blue-200" 
+                    : "bg-gray-100 text-gray-700 border-gray-200 hover:bg-gray-200"
+                  }`}
                 >
                   <LayoutDashboard className="mr-2 h-4 w-4" />
                   Dashboard
                 </Button>
-              )}
+          
               
               <Button variant="outline" onClick={handleLogout} className="text-red-600 hover:text-red-700 hover:bg-red-50 border-red-100">
                 <LogOut className="mr-2 h-4 w-4" />
@@ -92,6 +99,7 @@ export default function Navbar({ searchTerm, onSearchChange }: NavbarProps) {
                 Sign Up
               </Button>
             </>
+          )
           )}
         </div>
       </div>
