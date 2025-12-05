@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import config from "../config/envConfig.js";
 import User from "../models/User.js";
+import { sendWelcomeEmail } from "../utils/sendEmail.js";
 
 const generateToken = (id, role) => {
   return jwt.sign({ id, role }, config.JWT_SECRET, { expiresIn: "30d" });
@@ -13,6 +14,7 @@ export const registerUserService = async ({ name, email, password, role }) => {
   }
 
   const user = await User.create({ name, email, password, role });
+  sendWelcomeEmail(user.email, user.name);
 
   return {
     _id: user._id,

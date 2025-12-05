@@ -56,7 +56,7 @@ export const useRegister = () => {
 
       toast.success(`Account created! Welcome, ${response.name}`);
 
-      router.push("/student/dashboard");
+      router.push("/");
     },
     onError: (error: Error) => {
       const message = error.response?.data?.message || "Registration failed";
