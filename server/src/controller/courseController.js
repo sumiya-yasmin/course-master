@@ -1,5 +1,4 @@
-import * as courseServices from '../services/courseServices.js';
-
+import * as courseServices from "../services/courseServices.js";
 
 export const createCourse = async (req, res) => {
   try {
@@ -30,7 +29,10 @@ export const getCourseById = async (req, res) => {
 
 export const updateCourse = async (req, res) => {
   try {
-    const updatedCourse = await courseServices.updateCourseService(req.params.id, req.body);
+    const updatedCourse = await courseServices.updateCourseService(
+      req.params.id,
+      req.body
+    );
     res.status(200).json(updatedCourse);
   } catch (error) {
     res.status(404).json({ message: error.message });

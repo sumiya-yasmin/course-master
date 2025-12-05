@@ -1,15 +1,15 @@
-import * as submissionService from '../services/submissionServices.js';
+import * as submissionService from "../services/submissionServices.js";
 
 export const createSubmission = async (req, res) => {
   try {
     const { courseId, type, content, score } = req.body;
-    
+
     const submission = await submissionService.createSubmissionService({
       userId: req.user._id,
       courseId,
       type,
       content,
-      score
+      score,
     });
 
     res.status(201).json(submission);
@@ -17,7 +17,6 @@ export const createSubmission = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
-
 
 export const getAllSubmissions = async (req, res) => {
   try {

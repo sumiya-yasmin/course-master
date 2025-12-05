@@ -1,4 +1,4 @@
-import Course from '../models/Course.js';
+import Course from "../models/Course.js";
 
 export const createCourseService = async (courseData) => {
   const course = await Course.create(courseData);
@@ -6,7 +6,15 @@ export const createCourseService = async (courseData) => {
 };
 
 export const getAllCoursesService = async (query) => {
-  const { search, category, minPrice, maxPrice, sort, page = 1, limit = 10 } = query;
+  const {
+    search,
+    category,
+    minPrice,
+    maxPrice,
+    sort,
+    page = 1,
+    limit = 10,
+  } = query;
 
   const dbQuery = {};
 
@@ -14,7 +22,7 @@ export const getAllCoursesService = async (query) => {
     dbQuery.$text = { $search: search };
   }
 
-  if (category && category !== 'All') {
+  if (category && category !== "All") {
     dbQuery.category = category;
   }
 
@@ -25,11 +33,10 @@ export const getAllCoursesService = async (query) => {
   }
 
   let sortOption = {};
-  if (sort === 'price_asc') sortOption.price = 1;      
-  if (sort === 'price_desc') sortOption.price = -1;    
-  if (sort === 'popular') sortOption.studentsEnrolled = -1; 
-  if (!sort) sortOption.createdAt = -1;            
-
+  if (sort === "price_asc") sortOption.price = 1;
+  if (sort === "price_desc") sortOption.price = -1;
+  if (sort === "popular") sortOption.studentsEnrolled = -1;
+  if (!sort) sortOption.createdAt = -1;
 
   const skip = (Number(page) - 1) * Number(limit);
 
@@ -37,7 +44,7 @@ export const getAllCoursesService = async (query) => {
     .sort(sortOption)
     .skip(skip)
     .limit(Number(limit))
-    .select('-syllabus'); 
+    .select("-syllabus");
 
   const total = await Course.countDocuments(dbQuery);
 
@@ -53,22 +60,22 @@ export const getAllCoursesService = async (query) => {
 
 export const getCourseByIdService = async (id) => {
   const course = await Course.findById(id);
-  if (!course) throw new Error('Course not found');
+  if (!course) throw new Error("Course not found");
   return course;
 };
 
 export const updateCourseService = async (id, updateData) => {
   const course = await Course.findByIdAndUpdate(id, updateData, {
     new: true,
-    runValidators: true 
+    runValidators: true,
   });
 
-  if (!course) throw new Error('Course not found');
+  if (!course) throw new Error("Course not found");
   return course;
 };
 
 export const deleteCourseService = async (id) => {
   const course = await Course.findByIdAndDelete(id);
-  if (!course) throw new Error('Course not found');
-  return { message: 'Course removed' };
+  if (!course) throw new Error("Course not found");
+  return { message: "Course removed" };
 };

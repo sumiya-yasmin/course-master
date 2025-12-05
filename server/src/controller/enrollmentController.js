@@ -1,15 +1,17 @@
-import * as enrollmentServices from '../services/enrollmentServices.js';
+import * as enrollmentServices from "../services/enrollmentServices.js";
 
 export const enrollStudent = async (req, res) => {
   try {
     const { courseId } = req.body;
-    const result = await enrollmentServices.enrollInCourseService(req.user._id, courseId);
+    const result = await enrollmentServices.enrollInCourseService(
+      req.user._id,
+      courseId
+    );
     res.status(201).json(result);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 };
-
 
 export const getMyCourses = async (req, res) => {
   try {
@@ -23,7 +25,11 @@ export const getMyCourses = async (req, res) => {
 export const updateProgress = async (req, res) => {
   try {
     const { courseId, lessonId } = req.body;
-    const result = await enrollmentServices.updateProgressService(req.user._id, courseId, lessonId);
+    const result = await enrollmentServices.updateProgressService(
+      req.user._id,
+      courseId,
+      lessonId
+    );
     res.status(200).json(result);
   } catch (error) {
     res.status(400).json({ message: error.message });

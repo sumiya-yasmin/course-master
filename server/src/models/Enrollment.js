@@ -1,32 +1,37 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-const enrollmentSchema = new mongoose.Schema({
-  student: { 
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: 'User', 
-    required: true 
+const enrollmentSchema = new mongoose.Schema(
+  {
+    student: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    course: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Course",
+      required: true,
+    },
+
+    completedLessons: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+      },
+    ],
+
+    progress: {
+      type: Number,
+      default: 0,
+      max: 100,
+    },
+    isCompleted: {
+      type: Boolean,
+      default: false,
+    },
   },
-  course: { 
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: 'Course', 
-    required: true 
-  },
-  
-  completedLessons: [{ 
-    type: mongoose.Schema.Types.ObjectId 
-  }],
-  
-  progress: { 
-    type: Number, 
-    default: 0,
-    max: 100
-  },
-  isCompleted: { 
-    type: Boolean, 
-    default: false 
-  }
-}, { timestamps: true });
+  { timestamps: true }
+);
 
 enrollmentSchema.index({ student: 1, course: 1 }, { unique: true });
 
-export default mongoose.model('Enrollment', enrollmentSchema);
+export default mongoose.model("Enrollment", enrollmentSchema);
