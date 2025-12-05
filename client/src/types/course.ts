@@ -15,8 +15,14 @@ export interface Batch {
 }
 export interface QuizQuestion {
   question: string;
-  options: string[]; 
+  options: string[];
   correctAnswer: string;
+}
+
+export interface Assignment {
+  title: string;
+  instructions: string;
+  totalPoints: number;
 }
 
 export interface Course {
@@ -29,9 +35,10 @@ export interface Course {
   thumbnail: string;
   level: string;
   tags: string[];
-  syllabus: Lesson[]; 
+  syllabus: Lesson[];
   batches: Batch[];
   quiz?: QuizQuestion[];
+  assignment: Assignment;
 }
 
 export interface CourseResponse {
@@ -60,4 +67,16 @@ export interface CreateCourseInput {
   thumbnail: string;
   level: string;
   tags: string[];
+  syllabus: Omit<Lesson, "_id">[];
+  batches: Omit<Batch, "_id">[];
+  quiz: QuizQuestion[];
+  assignment: Assignment;
+}
+
+export interface CourseFormData extends Omit<CreateCourseInput, "quiz"> {
+  quiz: {
+    question: string;
+    optionsString: string;
+    correctAnswer: string;
+  }[];
 }

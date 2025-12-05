@@ -1,8 +1,14 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import toast from 'react-hot-toast';
-import { useRouter } from 'next/navigation';
-import { createCourseApi, deleteCourseApi, getAdminEnrollmentsApi, updateCourseApi } from '../api/admin';
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import {
+  createCourseApi,
+  deleteCourseApi,
+  getAdminEnrollmentsApi,
+  updateCourseApi,
+} from "../api/admin";
+import { Error } from "../types/api";
 
 export const useDeleteCourse = () => {
   const queryClient = useQueryClient();
@@ -10,11 +16,11 @@ export const useDeleteCourse = () => {
   return useMutation({
     mutationFn: deleteCourseApi,
     onSuccess: () => {
-      toast.success('Course deleted successfully');
-      queryClient.invalidateQueries({ queryKey: ['courses'] });
+      toast.success("Course deleted successfully");
+      queryClient.invalidateQueries({ queryKey: ["courses"] });
     },
-    onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Failed to delete course');
+    onError: (error: Error) => {
+      toast.error(error.response?.data?.message || "Failed to delete course");
     },
   });
 };
@@ -26,12 +32,12 @@ export const useCreateCourse = () => {
   return useMutation({
     mutationFn: createCourseApi,
     onSuccess: (newCourse) => {
-      toast.success('Course created successfully!');
-      queryClient.invalidateQueries({ queryKey: ['courses'] });
-      router.push(`/course/${newCourse._id}`);  
+      toast.success("Course created successfully!");
+      queryClient.invalidateQueries({ queryKey: ["courses"] });
+      router.push(`/course/${newCourse._id}`);
     },
-    onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Failed to create course');
+    onError: (error: Error) => {
+      toast.error(error.response?.data?.message || "Failed to create course");
     },
   });
 };
@@ -43,20 +49,19 @@ export const useUpdateCourse = () => {
   return useMutation({
     mutationFn: updateCourseApi,
     onSuccess: (newCourse) => {
-      toast.success('Course updated!');
-      queryClient.invalidateQueries({ queryKey: ['courses'] });
+      toast.success("Course updated!");
+      queryClient.invalidateQueries({ queryKey: ["courses"] });
       router.push(`/course/${newCourse._id}`);
     },
-    onError: (_error: any) => {
-      toast.error('Failed to update course');
-    }
+    onError: (error: Error) => {
+      toast.error(error.response?.data?.message || "Failed to create course");
+    },
   });
 };
 
-export const useViewEnrollments= ()=>
-{
-return useQuery({
-    queryKey: ['admin-enrollments'],
+export const useViewEnrollments = () => {
+  return useQuery({
+    queryKey: ["admin-enrollments"],
     queryFn: getAdminEnrollmentsApi,
   });
 };

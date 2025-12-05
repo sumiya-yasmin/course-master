@@ -28,6 +28,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/src/components/ui/tabs";
+import { Course } from "@/src/types/course";
 
 export default function CourseDetailsPage() {
   const params = useParams();
@@ -61,8 +62,8 @@ export default function CourseDetailsPage() {
         Loading...
       </div>
     );
-  const quizQuestions: QuizQuestion[] = (course as any).quiz || [];
-  const assignmentConfig = (course as any).assignment || {
+  const quizQuestions: QuizQuestion[] = (course as Course).quiz || [];
+  const assignmentConfig = (course as Course).assignment || {
     title: "Final Assignment",
     instructions: "Paste your Google Drive link or write your answer below.",
   };
@@ -188,12 +189,11 @@ export default function CourseDetailsPage() {
                 </Card>
               </TabsContent>
 
-              {/* QUIZ TAB */}
               <TabsContent value="quiz" className="mt-4">
                 <Quiz
                   questions={quizQuestions}
                   onComplete={handleQuizComplete}
-                  isReadOnly={isAdmin} // Pass the flag
+                  isReadOnly={isAdmin}
                 />
               </TabsContent>
             </Tabs>

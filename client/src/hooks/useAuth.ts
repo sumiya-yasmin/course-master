@@ -1,7 +1,8 @@
-import { useRouter } from 'next/navigation';
-import toast from 'react-hot-toast';
-import { useMutation } from '@tanstack/react-query';
-import { loginUserApi, registerUserApi } from '../api/auth'; 
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
+import { useMutation } from "@tanstack/react-query";
+import { loginUserApi, registerUserApi } from "../api/auth";
+import { Error } from "../types/api";
 
 export const useLogin = () => {
   const router = useRouter();
@@ -9,32 +10,34 @@ export const useLogin = () => {
   const mutation = useMutation({
     mutationFn: loginUserApi,
     onSuccess: (response) => {
-      localStorage.setItem('token', response.token);
-      localStorage.setItem('user', JSON.stringify({ 
-        name: response.name, 
-        role: response.role 
-      }));
+      localStorage.setItem("token", response.token);
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          name: response.name,
+          role: response.role,
+        })
+      );
 
       toast.success(`Welcome back, ${response.name}!`);
 
-      if (response.role === 'admin') {
-        router.push('/admin/dashboard');
+      if (response.role === "admin") {
+        router.push("/admin/dashboard");
       } else {
-        router.push('/student/dashboard');
+        router.push("/student/dashboard");
       }
     },
-    onError: (error: any) => {
-      const message = error.response?.data?.message || 'Login failed';
+    onError: (error: Error) => {
+      const message = error.response?.data?.message || "Login failed";
       toast.error(message);
     },
   });
 
-  return { 
+  return {
     login: mutation.mutate,
-    isLoading: mutation.isPending 
+    isLoading: mutation.isPending,
   };
 };
-
 
 export const useRegister = () => {
   const router = useRouter();
@@ -42,24 +45,27 @@ export const useRegister = () => {
   const mutation = useMutation({
     mutationFn: registerUserApi,
     onSuccess: (response) => {
-      localStorage.setItem('token', response.token);
-      localStorage.setItem('user', JSON.stringify({ 
-        name: response.name, 
-        role: response.role 
-      }));
+      localStorage.setItem("token", response.token);
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          name: response.name,
+          role: response.role,
+        })
+      );
 
       toast.success(`Account created! Welcome, ${response.name}`);
-      
-      router.push('/student/dashboard');
+
+      router.push("/student/dashboard");
     },
-    onError: (error: any) => {
-      const message = error.response?.data?.message || 'Registration failed';
+    onError: (error: Error) => {
+      const message = error.response?.data?.message || "Registration failed";
       toast.error(message);
     },
   });
 
-  return { 
+  return {
     registerUser: mutation.mutate,
-    isLoading: mutation.isPending 
+    isLoading: mutation.isPending,
   };
 };

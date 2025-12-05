@@ -27,6 +27,8 @@ import {
   TabsTrigger,
 } from "@/src/components/ui/tabs";
 import { useRouter } from "next/navigation";
+import { Submission } from "@/src/types/student";
+import { Course } from "@/src/types/course";
 
 export default function AdminSubmissionsPage() {
   const router = useRouter();
@@ -36,12 +38,12 @@ export default function AdminSubmissionsPage() {
   const [selectedCourse, setSelectedCourse] = useState("all");
 
   const filteredSubmissions =
-    submissions?.filter((sub: any) => {
+    submissions?.filter((sub: Submission) => {
       if (selectedCourse === "all") return true;
       return sub.course?._id === selectedCourse;
     }) || [];
 
-  const renderSubmissionGrid = (items: any[]) => {
+  const renderSubmissionGrid = (items: Submission[]) => {
     if (items.length === 0) {
       return (
         <div className="col-span-full text-center py-20 bg-white rounded-xl shadow-sm border border-dashed">
@@ -62,7 +64,7 @@ export default function AdminSubmissionsPage() {
 
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {items.map((sub: any) => {
+        {items.map((sub: Submission) => {
           const isQuiz = sub.type === "quiz";
 
           return (
@@ -199,7 +201,6 @@ export default function AdminSubmissionsPage() {
               </TabsTrigger>
             </TabsList>
 
-            {/* COURSE FILTER */}
             <div className="w-full md:w-64 relative">
               <Filter className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
               <select
@@ -208,7 +209,7 @@ export default function AdminSubmissionsPage() {
                 onChange={(e) => setSelectedCourse(e.target.value)}
               >
                 <option value="all">All Courses</option>
-                {coursesData?.courses.map((course: any) => (
+                {coursesData?.courses.map((course: Course) => (
                   <option key={course._id} value={course._id}>
                     {course.title}
                   </option>
@@ -241,7 +242,7 @@ export default function AdminSubmissionsPage() {
               >
                 {renderSubmissionGrid(
                   filteredSubmissions.filter(
-                    (s: any) => s.type === "assignment"
+                    (s: Submission) => s.type === "assignment"
                   )
                 )}
               </TabsContent>
@@ -251,7 +252,9 @@ export default function AdminSubmissionsPage() {
                 className="mt-0 animate-in fade-in-50 duration-500"
               >
                 {renderSubmissionGrid(
-                  filteredSubmissions.filter((s: any) => s.type === "quiz")
+                  filteredSubmissions.filter(
+                    (s: Submission) => s.type === "quiz"
+                  )
                 )}
               </TabsContent>
             </>
