@@ -14,6 +14,14 @@ const config = {
     allowedHeaders: ["Content-Type", "Authorization"],
   },
   JWT_SECRET: process.env.JWT_SECRET,
+  SMTP: {
+    HOST: process.env.SMTP_HOST,
+    PORT: process.env.SMTP_PORT,
+    USER: process.env.SMTP_USER,
+    PASS: process.env.SMTP_PASS,
+    SECURE: process.env.SMTP_SECURE === "true",
+    FROM: process.env.SMTP_FROM,
+  },
 };
 
 export default config;
